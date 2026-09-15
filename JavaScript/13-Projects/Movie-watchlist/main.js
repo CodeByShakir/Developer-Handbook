@@ -4,11 +4,14 @@ import { v4 as uuidv4 } from "https://jspm.dev/uuid";
 
 const API_KEY = "938c6bc8";
 const STORAGE_KEY = "moviesList";
+const movieWatchlist = [];
+const watchList = [];
+// console.log(watchList);
 
 /* ------ State ----- */
 
-const movieWatchlist = [];
-console.log(movieWatchlist);
+export const movies = loadMovies();
+// localStorage.clear();
 
 /* ------ DOM Elements ------ */
 
@@ -35,8 +38,10 @@ async function getWatchList(searchTerm) {
   const moviesList = await getMoviesList(searchTerm);
   moviesList.Search.forEach(async (movie) => {
     const movieInfo = await getMovies(movie.imdbID);
-    const { Poster, Title, imdbRating, Runtime, Genre, Plot } = movieInfo;
+    const { imdbID, Poster, Title, imdbRating, Runtime, Genre, Plot } =
+      movieInfo;
     movieWatchlist.push({
+      imdbID,
       Poster,
       Title,
       imdbRating,
@@ -49,15 +54,15 @@ async function getWatchList(searchTerm) {
 }
 
 function loadMovies() {
-  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || movieWatchlist;
+  return JSON.parse(localStorage.getItem(STORAGE_KEY));
 }
 
 function saveMovies() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(movieWatchlist));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(watchList));
 }
 
-function findMovie(id) {
-  return movieWatchlist.find((movie) => movie.uuid === id);
+function findMovie(movieId) {
+  return movieWatchlist.find((movie) => movie.imdbID === movieId);
 }
 
 /* ------ Event Listener ------ */
@@ -65,8 +70,8 @@ document.addEventListener("click", (e) => {
   if (e.target.id === "search-button") {
     handleSearchBtnClick();
   }
-  if (e.target.id === "watchlist-button") {
-    handleWatchlistBtnClick();
+  if (e.target.dataset.movie) {
+    handleWatchlistBtnClick(e.target.dataset.movie);
   }
 });
 
@@ -80,8 +85,10 @@ function handleSearchBtnClick() {
   searchInput.value = "";
 }
 
-function handleWatchlistBtnClick() {
-  console.log("Clicked!");
+function handleWatchlistBtnClick(movieId) {
+  const movie = findMovie(movieId);
+  watchList.push(movie);
+  saveMovies();
 }
 
 /* ------ HTML ------ */
@@ -102,7 +109,7 @@ function getMoviesHTML(movie) {
           <div class="movie-info-body">
             <p>${movie.Runtime}</p>
             <p>${movie.Genre}</p>
-            <button class="watchlist-button" id="watchlist-button">
+            <button class="watchlist-button" data-movie="${movie.imdbID}">
               <i class="fa-solid fa-circle-plus"></i>
               Watchlist
             </button>
@@ -116,7 +123,10 @@ function getMoviesHTML(movie) {
 }
 
 function getFeedHtml() {
-  return movieWatchlist.map((movie) => getMoviesHTML(movie)).join("");
+  return (
+    movieWatchlist &&
+    movieWatchlist.map((movie) => getMoviesHTML(movie)).join("")
+  );
 }
 /* ------ Render ------ */
 

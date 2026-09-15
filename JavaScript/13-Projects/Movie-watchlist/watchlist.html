@@ -3,7 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>My Watchlist</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css"
+      integrity="sha512-ApSLB1Pd3/bZN8fWB/RG9YhN/7bd9Hkf3AGaE2mPfebjrxagjuBtx2GcgdqIlJkUzwylBo61r9Xa9NmgBI0swA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
   </head>
-  <body></body>
+  <body>
+    <div class="watchlist-container">
+      <div class="watchlist-header">
+        <div class="watchlist-nav">
+          <h1>Find your film</h1>
+          <ul>
+            <li>
+              <a href="./index.html">Home</a>
+            </li>
+          </ul>
+        </div>
+        <div class="bg-transparent"></div>
+      </div>
+
+      <div class="watchlist-main">
+        <div class="watchlist-movies" id="watchlist-movies"></div>
+        <div class="movie-img"></div>
+        <div class="start-exploring">
+          <p>Your watchlist is looking a little empty...</p>
+          <button class="watchlist-button">
+            <i class="fa-solid fa-circle-plus"></i>
+            Let’s add some movies!
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="./watchlist.js" type="module"></script>
+  </body>
 </html>
