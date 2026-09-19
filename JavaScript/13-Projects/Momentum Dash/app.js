@@ -8,13 +8,17 @@ const DEFAULT_CITY = "Islamabad";
 /* ==========================================================================
    DOM Elements
    ========================================================================== */
+// Weather elements
 const weatherIcon = document.getElementById("weather-icon");
 const weatherTemp = document.getElementById("weather-temp");
 const weatherCity = document.getElementById("weather-city");
-const weatherIconContainer = document.getElementById("weather-icon-container");
+
+// Clock & Greeting elements
+const clockEl = document.getElementById("clock");
+const greetingEl = document.getElementById("greeting");
 
 /* ==========================================================================
-   API / Data Fetching
+   Feature: Weather Service
    ========================================================================== */
 async function fetchWeather(city) {
   try {
@@ -39,22 +43,17 @@ async function fetchWeather(city) {
   }
 }
 
-/* ==========================================================================
-   Render Functions
-   ========================================================================== */
 function renderWeather(temp, icon, city) {
   weatherTemp.textContent = `${temp}°C`;
-  weatherIconContainer.innerHTML = `<img id="weather-icon" src="${icon}" alt="Weather Icon" />`;
+  weatherIcon.innerHTML = `<img id="weather-icon" src="${icon}" alt="Weather Icon" />`;
   weatherCity.textContent = city;
 }
 
 function renderWeatherError() {
-  weatherIconContainer.innerHTML = `<i class="fa-whiteboard fa-semibold fa-cloud"></i>`;
+  weatherIcon.innerHTML = `<i class="fa-solid fa-cloud"></i>`;
+  weatherCity.textContent = "Unavailable";
 }
 
-/* ==========================================================================
-   App Initialization
-   ========================================================================== */
 async function displayWeather(city) {
   const weatherData = await fetchWeather(city);
 
@@ -68,5 +67,29 @@ async function displayWeather(city) {
   }
 }
 
-// Initial Run
+/* ==========================================================================
+   Feature: Clock & Greeting
+   ========================================================================== */
+function updateClock() {
+  const now = new Date();
+  const hours = now.getHours();
+  const hoursFormatted = hours % 12 || 12;
+  const minutes = now.getMinutes();
+  const period = hours >= 12 ? "PM" : "AM";
+  const greeting =
+    hours < 12
+      ? "Good Morning"
+      : hours < 18
+        ? "Good Afternoon"
+        : "Good Evening";
+
+  clockEl.textContent = `${hoursFormatted.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")} ${period}`;
+  greetingEl.textContent = greeting;
+}
+
+/* ==========================================================================
+   App Initialization
+   ========================================================================== */
+
 displayWeather(DEFAULT_CITY);
+updateClock();
