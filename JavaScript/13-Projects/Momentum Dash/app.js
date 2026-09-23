@@ -90,6 +90,11 @@ function updateClock() {
 /* ==========================================================================
    App Initialization
    ========================================================================== */
+function initDashboard() {
+  displayWeather(DEFAULT_CITY);
+  updateClock();
+  setInterval(updateClock, 1000);
+}
 
-displayWeather(DEFAULT_CITY);
-updateClock();
+// Initial startup
+initDashboard();
